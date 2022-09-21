@@ -102,6 +102,24 @@ in b + c
 
 # home-manager
 
+* configurable modules
+* manages only your home environment
+
+```nix
+programs.zsh = {
+  enable = true;
+  enableAutosuggestions = true;
+  enableCompletion = true;
+  autocd = true;
+  dotDir = ".config/zsh";
+
+  sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+};
+```
+
 ---
 
 # getting started
@@ -124,6 +142,8 @@ nix --experimental-features "nix-command flakes" build ".#homeConfigurations.sol
 ---
 
 # package your own neovim
+
+* SHOWTIME
 
 ---
 
