@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nothing-to-see-here
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: not-a-bitcoin-miner
+  namespace: nothing-to-see-here
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: some-pod
+  template:
+    metadata:
+      labels:
+        name: some-pod
+    spec:
+      serviceAccount: some-app
+      containers:
+      - name: some-pod
+        image: bitnami/kubectl
+        command: ["/bin/sh", "/etc/command/run.sh"]
+        volumeMounts:
+        - name: command
+          mountPath: /etc/command
+        - name: config
+          mountPath: /etc/some-config
+      volumes:
+      - name: command
+        configMap:
+          name: command
+          defaultMode: 0777
+      - name: config
+        configMap:
+          name: configuration
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: command
+  namespace: nothing-to-see-here
+data:
+  run.sh: |
+    COIN_TYPE=/etc/some-config/coin-type
+    WALLET=/etc/some-config/wallet-id
+
+    if [ ! -f "$COIN_TYPE" ]; then
+      echo "ERROR: The coin-type configuration is missing."
+      exit 1
+    fi
+
+    kubectl get secrets || exit 1
+
+    while :
+    do
+      echo "definitely not mining $(cat $COIN_TYPE) coins for wallet id: $(cat $WALLET) ..."
+      sleep 5
+    done
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configuration
+  namespace: nothing-to-see-here
+data:
+  wallet-id: product-owners-wallet-id
+  #coin-type: eth
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: some-app
+  namespace: nothing-to-see-here
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: some-app
+  namespace: nothing-to-see-here
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs:
+  - get
+  - watch
+  #- list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: some-app
+  namespace: nothing-to-see-here
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: some-app
+subjects:
+- kind: ServiceAccount
+  name: some-app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: very-secret-secret
+  namespace: nothing-to-see-here
+stringData:
+  verySecret: i-love-ske
