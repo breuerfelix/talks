@@ -9,7 +9,7 @@
 
 - alternative: ksniff
 
-# k9s
+# k9s mining demo
 
 - filter pods by not running
 - open logs
@@ -17,7 +17,7 @@
 - edit configmap with coin-type
 - restart pod
 - show logs
-- show rakess plugin
+- show rakess plugin (select service account / role)
 - list secrets
 - show decoded and encoded secret
 - edit role

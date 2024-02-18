@@ -107,4 +107,4 @@ metadata:
   name: very-secret-secret
   namespace: nothing-to-see-here
 stringData:
-  verySecret: i-love-ske
+  verySecret: felix-actually-hates-climbing
