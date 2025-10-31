@@ -13,11 +13,11 @@
 
 - filter pods by not running
 - open logs
-- show xray of failed pod
+- show xray of failed pod (execute `:xray pod`)
 - edit configmap with coin-type
 - restart pod
 - show logs
-- show rakess plugin (select service account / role)
+- show rakess plugin (search for service account and select role)
 - list secrets
 - show decoded and encoded secret
 - edit role
